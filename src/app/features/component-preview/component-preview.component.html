@@ -1,0 +1,11 @@
+<div [ngClass]="{ border: content != undefined }" >
+    <div *ngFor="let item of content; trackBy: trackByFn">
+      <div
+        [id]="item.key"
+        class="editor"
+        [innerHTML]="item.data"
+      >
+      </div>
+    </div>
+  </div>
+  

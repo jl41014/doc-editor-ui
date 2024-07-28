@@ -1,0 +1,8 @@
+<div class="container">
+  <div contenteditable [(ngModel)]="content" class="edit-box" (input)="inputText($event)">
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div [innerHTML]="content"></div>
+</div>

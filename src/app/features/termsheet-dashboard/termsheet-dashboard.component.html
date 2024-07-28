@@ -1,0 +1,86 @@
+<div class="container"  [ngClass]="{'container-edit': mode=='edit'}">
+  <div class="list-container" [ngClass]="{'list-container-edit': mode=='edit'}">
+    <div class="example-container">
+      <div class="termsheet-content-list-header">
+        <h2 class="header-text">Termsheet Content</h2>
+        <button  (click)="sortToggle()" *ngIf="mode === 'edit' && sortingDisabled" mat-button matTooltip="Sortable"><i class="material-icons toggle-off">toggle_off</i></button>
+        <button  (click)="sortToggle()" *ngIf="mode === 'edit' && !sortingDisabled"  mat-button matTooltip="Sort Disable"><i class="material-icons toggle">toggle_on</i></button>
+      </div>
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="todo"
+        [cdkDropListConnectedTo]="[doneList]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListSortingDisabled]="sortingDisabled"
+        id="termsheet-content-list"
+      >
+        <div class="example-box" *ngFor="let item of todo;index as i">
+          <!-- <ng-template #popHeader>
+            <div class="popHeader">{{item}}</div>
+          </ng-template>
+  
+          <ng-template #popContent>
+            <div [innerHTML]="data[item]" class="popContent"></div>
+          </ng-template> -->
+
+          <div cdkDrag class="title">{{ item }}</div>
+          <i class="material-icons edit-icon" (click)="chooseEditItem(i)" *ngIf="mode === 'edit'" matTooltip="edit">edit</i>
+          <!-- <div class="click-icon"
+            [ngbPopover]="popContent"
+            triggers="mouseenter:mouseleave"
+            popoverClass="popover" placement="end"
+            [popoverTitle]="popHeader"
+            triggers="manual"
+            #p="ngbPopover" -->
+          <!-- > -->
+          <!-- <i class="material-icons" *ngIf="!p.isOpen()" (click)="p.open()">visibility</i>
+            <i class="material-icons" *ngIf="p.isOpen()" (click)="p.close()">visibility_off</i> -->
+          <!-- </div> -->
+          <!-- <div [innerHTML]="data[item]" class="content"></div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="example-container editing-list">
+      <div class="termsheet-content-list-header">
+        <h2 class="header-text" *ngIf="mode === 'preview'">Preview List</h2>
+        <h2 class="header-text" *ngIf="mode === 'edit'">Editing {{done[0]}}</h2>
+      </div>
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="done"
+        [cdkDropListConnectedTo]="[todoList]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)"
+        id="termsheet-editing-list"
+      >
+        <div class="example-box edit" *ngFor="let item of done; index as i">
+          <div cdkDrag class="title">{{ done[i] }}</div>
+          <div (click)="remove(i)" class="click-icon" *ngIf="mode === 'preview'" matTooltip="remove">
+            <i class="material-icons">playlist_remove</i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-component-preview
+    [(content)]=previewList
+    *ngIf="mode === 'preview'"
+  ></app-component-preview>
+
+  <app-editor [(content)]="editConent" *ngIf="mode === 'edit'"></app-editor>
+
+
+  <div class="btn-group" [ngStyle]="{'right': mode == 'edit' ? '60px' : '-110px'}">
+    <button mat-button color="primary" (click)="switchMode('edit')" *ngIf="mode == 'preview'">Edit</button>
+    <button mat-button color="primary" (click)="save()" *ngIf="mode == 'edit'">Save Edit</button>
+    <button mat-button color="primary" (click)="openNewComponentPopup()" *ngIf="mode == 'edit'">Add Component</button>
+    <button mat-button color="primary" *ngIf="mode == 'edit'">Remove Component</button>
+    <button mat-button color="primary" (click)="switchMode('preview')" *ngIf="mode == 'edit'">Preview List</button>
+    <button mat-button color="primary" (click)="viewPDF()">Preview PDF</button>
+  </div>
+</div>
